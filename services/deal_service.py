@@ -1,3 +1,4 @@
+import logging
 from database.models import db, TravelDeal
 
 
@@ -24,3 +25,43 @@ class DealService:
     @staticmethod
     def get_deal_by_id(deal_id):
         return TravelDeal.query.get(deal_id)
+
+
+    @staticmethod
+    def search_deals(
+        destination=None,
+        platform=None,
+        travel_type=None
+    ):
+        """
+        search deals based on query parameters
+        """
+
+
+        query = TravelDeal.query
+
+        if destination:
+
+            query = query.filter(
+                TravelDeal.destination.ilike(
+                    f"%{destination}%"
+                )
+            )
+
+        if platform:
+
+            query = query.filter(
+                TravelDeal.platform.ilike(
+                    f"%{platform}%"
+                )
+            )
+
+        if travel_type:
+
+            query = query.filter(
+                TravelDeal.travel_type.ilike(
+                    travel_type
+                )
+            )
+
+        return query.all()
